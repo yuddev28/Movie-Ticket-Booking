@@ -27,9 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException
-    {
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
@@ -50,8 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
-                            userDetails.getAuthorities()
-                    );
+                            userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
@@ -61,24 +59,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("""
-                {
-                    "status": 401,
-                    "error": "TOKEN_EXPIRED",
-                    "message": "JWT token has expired"
-                }
-                """);
+                    {
+                        "status": 401,
+                        "error": "TOKEN_EXPIRED",
+                        "message": "JWT token has expired"
+                    }
+                    """);
             return;
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("""
-                {
-                    "status": 401,
-                    "error": "INVALID_TOKEN",
-                    "message": "JWT token is invalid"
-                }
-                """);
+                    {
+                        "status": 401,
+                        "error": "INVALID_TOKEN",
+                        "message": "JWT token is invalid"
+                    }
+                    """);
             return;
         }
         filterChain.doFilter(request, response);

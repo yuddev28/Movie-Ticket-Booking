@@ -62,4 +62,12 @@ public class ShowTimeController {
         List<ShowTimeSeatResponse> seats = showTimeService.getSeatsByShowTimeId(id);
         return ResponseEntity.ok(new ApiResponse("Get showtime seats success", seats));
     }
+
+    // Delete showtime (Admin)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteShowTime(@PathVariable int id)
+    {
+        showTimeService.deleteShowTime(id);
+        return ResponseEntity.ok(new ApiResponse("Delete showtime success", null));
+    }
 }

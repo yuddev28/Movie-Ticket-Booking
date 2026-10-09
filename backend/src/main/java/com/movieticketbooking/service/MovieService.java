@@ -19,4 +19,6 @@ public interface MovieService {
     MovieResponse addMovie(CreateMovieRequest request);
 
     MovieResponse updateMovie(UpdateMovieRequest request);
+
+    void deleteMovie(int id);
 }

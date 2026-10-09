@@ -44,10 +44,18 @@ public class GenreController {
     }
 
     // Update genre
-    @PutMapping("/edit")
+    @PutMapping({"/edit", "/{id}"})
     public ResponseEntity<ApiResponse> updateGenre(@RequestBody @Valid UpdateGenreRequest request)
     {
         GenreResponse genre = genreService.updateGenre(request);
         return ResponseEntity.ok(new ApiResponse("Update genre success", genre));
+    }
+
+    // Delete genre
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteGenre(@PathVariable short id)
+    {
+        genreService.deleteGenre(id);
+        return ResponseEntity.ok(new ApiResponse("Delete genre success", null));
     }
 }

@@ -40,11 +40,18 @@ public class CinemaController {
         return ResponseEntity.ok(new ApiResponse("Create success", resp));
     }
 
-    @PutMapping("/edit")
+    @PutMapping({"/edit", "/{id}"})
     public ResponseEntity<ApiResponse> updateCinema(
             @RequestBody @Valid UpdateCinemaRequest request)
     {
         CinemaResponse resp = cinemaService.updateCinema(request);
         return ResponseEntity.ok(new ApiResponse("Update success", resp));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteCinema(@PathVariable int id)
+    {
+        cinemaService.deleteCinema(id);
+        return ResponseEntity.ok(new ApiResponse("Delete cinema success", null));
     }
 }

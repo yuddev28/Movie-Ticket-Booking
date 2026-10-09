@@ -17,4 +17,6 @@ public interface ShowTimeSeatRepository extends JpaRepository<ShowTimeSeat, Inte
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT s FROM ShowTimeSeat s WHERE s.id = :id")
     Optional<ShowTimeSeat> findByIdWithLock(@Param("id") Integer id);
+
+    void deleteByShowTimeId(int showTimeId);
 }

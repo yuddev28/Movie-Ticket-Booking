@@ -66,6 +66,14 @@ public class GenreServiceImpl implements GenreService {
         return toResponse(saved);
     }
 
+    @Override
+    public void deleteGenre(short id) {
+        if (!genreRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Genre not found with id: " + id);
+        }
+        genreRepository.deleteById(id);
+    }
+
     // mapper
     private GenreResponse toResponse(Genre genre)
     {

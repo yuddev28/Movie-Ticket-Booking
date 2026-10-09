@@ -13,4 +13,5 @@ public interface RoomService {
     List<RoomResponse> findByCinemaId(int cinemaId);
     RoomResponse createRoom(CreateRoomRequest request);
     RoomResponse updateRoom(UpdateRoomRequest request);
+    void deleteRoom(int id);
 }

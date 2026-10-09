@@ -134,6 +134,15 @@ public class MovieServiceImpl implements MovieService {
         return toResponse(saved);
     }
 
+    @CacheEvict(value = "movies", allEntries = true)
+    @Override
+    public void deleteMovie(int id) {
+        if (!movieRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Movie not found with id: " + id);
+        }
+        movieRepository.deleteById(id);
+    }
+
     // mapper
     private MovieResponse toResponse(Movie movie) 
     {

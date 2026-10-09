@@ -21,7 +21,7 @@ public class MovieController {
     private final MovieService movieService;
 
     // Get movie by id
-    @GetMapping("/movie/{id}")
+    @GetMapping({"/movie/{id}", "/{id}"})
     public ResponseEntity<ApiResponse> getById(@PathVariable Integer id)
     {
         MovieResponse resp = movieService.getMovieById(id);
@@ -70,11 +70,19 @@ public class MovieController {
     }
 
     // Update movie
-    @PutMapping("/edit")
+    @PutMapping({"/edit", "/{id}"})
     public ResponseEntity<ApiResponse> updateMovie
             (@RequestBody @Valid UpdateMovieRequest request)
     {
         MovieResponse resp = movieService.updateMovie(request);
         return ResponseEntity.ok(new ApiResponse("Update movie success", resp));
+    }
+
+    // Delete movie
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteMovie(@PathVariable int id)
+    {
+        movieService.deleteMovie(id);
+        return ResponseEntity.ok(new ApiResponse("Delete movie success", null));
     }
 }

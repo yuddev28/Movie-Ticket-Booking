@@ -83,6 +83,14 @@ public class CinemaServiceImpl implements CinemaService {
         return toResponse(saved);
     }
 
+    @Override
+    public void deleteCinema(int id) {
+        if (!cinemaRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Cinema not found with id: " + id);
+        }
+        cinemaRepository.deleteById(id);
+    }
+
     // map to response
     private CinemaResponse toResponse(Cinema cinema)
     {

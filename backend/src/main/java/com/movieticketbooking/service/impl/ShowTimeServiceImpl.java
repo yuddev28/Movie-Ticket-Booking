@@ -16,9 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -114,6 +112,16 @@ public class ShowTimeServiceImpl implements ShowTimeService {
         Page<ShowTime> showTimePage = showTimeRepository.findAll(pageable);
         List<ShowTime> list = showTimePage.getContent();
         return list.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public void deleteShowTime(int id) {
+        if (!showTimeRepository.existsById(id)) {
+            throw new ResourceNotFoundException("ShowTime not found with id: " + id);
+        }
+        showTimeSeatRepository.deleteByShowTimeId(id);
+        showTimeRepository.deleteById(id);
     }
     
     // mapper

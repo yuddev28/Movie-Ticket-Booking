@@ -13,7 +13,6 @@ import com.movieticketbooking.service.CinemaService;
 import com.movieticketbooking.service.RoomService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -93,6 +92,14 @@ public class RoomServiceImpl implements RoomService {
         room.setDescription(request.getDescription());
         Room savedRoom = roomRepository.save(room);
         return toResponse(savedRoom);
+    }
+
+    @Override
+    public void deleteRoom(int id) {
+        if (!roomRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Room not found with id: " + id);
+        }
+        roomRepository.deleteById(id);
     }
 
     // map to response

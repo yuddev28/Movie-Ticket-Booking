@@ -13,4 +13,5 @@ public interface GenreService {
     GenreResponse getById(short id);
     GenreResponse addGenre(CreateGenreRequest request);
     GenreResponse updateGenre(UpdateGenreRequest request);
+    void deleteGenre(short id);
 }

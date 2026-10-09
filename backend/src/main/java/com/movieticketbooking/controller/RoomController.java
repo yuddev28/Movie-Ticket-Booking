@@ -35,10 +35,18 @@ public class RoomController {
     }
 
     // Update room (only name and description)
-    @PutMapping("/edit")
+    @PutMapping({"/edit", "/{id}"})
     public ResponseEntity<ApiResponse> updateRoom(@RequestBody @Valid UpdateRoomRequest request)
     {
         RoomResponse roomResponse = roomService.updateRoom(request);
             return ResponseEntity.ok(new ApiResponse("Update room success", roomResponse));
+    }
+
+    // Delete room
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteRoom(@PathVariable int id)
+    {
+        roomService.deleteRoom(id);
+        return ResponseEntity.ok(new ApiResponse("Delete room success", null));
     }
 }
