@@ -136,6 +136,18 @@ export default function AdminShowtimes() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa suất chiếu này không? Tất cả dữ liệu đặt ghế của suất chiếu này sẽ bị xóa.')) {
+      try {
+        await showtimeService.delete(id);
+        toast.success('Xóa suất chiếu thành công!');
+        fetchShowtimes();
+      } catch (err) {
+        toast.error(err.message || 'Xóa suất chiếu thất bại');
+      }
+    }
+  };
+
   const showtimeList = Array.isArray(data?.content) ? data.content : [];
 
   return (
@@ -166,12 +178,13 @@ export default function AdminShowtimes() {
                 <th className="p-4">Phòng Chiếu</th>
                 <th className="p-4">Giá Vé</th>
                 <th className="p-4">Thời Gian Bắt Đầu</th>
+                <th className="p-4 text-right">Hành Động</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800">
               {showtimeList.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="p-6 text-center text-slate-500">
+                  <td colSpan="7" className="p-6 text-center text-slate-500">
                     Chưa có suất chiếu nào trong hệ thống
                   </td>
                 </tr>
@@ -185,6 +198,14 @@ export default function AdminShowtimes() {
                     <td className="p-4 font-bold text-amber-400">{st.price?.toLocaleString()} VNĐ</td>
                     <td className="p-4 font-medium text-slate-200">
                       {st.startTime ? new Date(st.startTime).toLocaleString('vi-VN') : ''}
+                    </td>
+                    <td className="p-4 text-right">
+                      <button
+                        onClick={() => handleDelete(st.id)}
+                        className="px-3 py-1.5 bg-red-950/50 hover:bg-red-900/80 text-red-400 rounded-lg text-xs font-semibold border border-red-900/50 transition-all"
+                      >
+                        Xóa
+                      </button>
                     </td>
                   </tr>
                 ))

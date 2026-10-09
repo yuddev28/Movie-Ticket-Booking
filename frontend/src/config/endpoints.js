@@ -17,9 +17,10 @@ export const API_ENDPOINTS = {
   // [GENRES MANAGEMENT]
   GENRES: {
     GET_ALL: '/genres/all',
-    GET_BY_ID: (id) => `/genres/gerne/${id}`,
+    GET_BY_ID: (id) => `/genres/genre/${id}`,
     ADD: '/genres/add',
-    EDIT: (id) => `/genres/edit/${id}`,
+    EDIT: (id) => `/genres/${id}`,
+    DELETE: (id) => `/genres/${id}`,
   },
 
   // [CINEMAS MANAGEMENT]
@@ -27,14 +28,16 @@ export const API_ENDPOINTS = {
     GET_ALL: '/cinemas/all',
     GET_BY_ID: (id) => `/cinemas/cinema/${id}`,
     ADD: '/cinemas/add',
-    EDIT: '/cinemas/edit',
+    EDIT: (id) => `/cinemas/${id}`,
+    DELETE: (id) => `/cinemas/${id}`,
   },
 
   // [ROOMS MANAGEMENT]
   ROOMS: {
     GET_BY_CINEMA_ID: (cinemaId) => `/rooms/cinema/${cinemaId}`,
     ADD: '/rooms/add',
-    EDIT: '/rooms/edit',
+    EDIT: (id) => `/rooms/${id}`,
+    DELETE: (id) => `/rooms/${id}`,
   },
 
   // [MOVIES MANAGEMENT]
@@ -44,7 +47,8 @@ export const API_ENDPOINTS = {
     COMING_SOON: '/movies/coming-soon',
     GET_BY_ID: (id) => `/movies/movie/${id}`,
     ADD: '/movies/add',
-    EDIT: (id) => `/movies/edit/${id}`,
+    EDIT: (id) => `/movies/${id}`,
+    DELETE: (id) => `/movies/${id}`,
   },
 
   // [SHOWTIMES MANAGEMENT]
@@ -54,6 +58,7 @@ export const API_ENDPOINTS = {
     GET_BY_ID: (id) => `/showtimes/${id}`,
     GET_SEATS: (showtimeId) => `/showtimes/${showtimeId}/seats`,
     FILTER: '/showtimes/filter',
+    DELETE: (id) => `/showtimes/${id}`,
   },
 
   // [TICKET BOOKING & CANCELLATION]

@@ -57,6 +57,18 @@ export default function AdminGenres() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa thể loại này không?')) {
+      try {
+        await genreService.delete(id);
+        toast.success('Xóa thể loại thành công!');
+        fetchGenres();
+      } catch (err) {
+        toast.error(err.message || 'Xóa thể loại thất bại');
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center border-b border-slate-800 pb-4">
@@ -96,12 +108,18 @@ export default function AdminGenres() {
                   <tr key={g.id} className="hover:bg-slate-800/50 transition-colors">
                     <td className="p-4 font-mono font-bold text-red-400">#{g.id}</td>
                     <td className="p-4 font-bold text-white text-base">{g.name}</td>
-                    <td className="p-4 text-right">
+                    <td className="p-4 text-right space-x-2">
                       <button
                         onClick={() => handleOpenEdit(g)}
                         className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold border border-slate-700 transition-all"
                       >
                         Chỉnh Sửa
+                      </button>
+                      <button
+                        onClick={() => handleDelete(g.id)}
+                        className="px-3 py-1.5 bg-red-950/50 hover:bg-red-900/80 text-red-400 rounded-lg text-xs font-semibold border border-red-900/50 transition-all"
+                      >
+                        Xóa
                       </button>
                     </td>
                   </tr>

@@ -51,6 +51,16 @@ const showtimeService = {
       throw error;
     }
   },
+
+  delete: async (id) => {
+    try {
+      const res = await axiosClient.delete(API_ENDPOINTS.SHOWTIMES.DELETE(id));
+      return res.data?.data || res.data;
+    } catch (error) {
+      console.error(`Lỗi khi xóa suất chiếu ID ${id}:`, error);
+      throw error;
+    }
+  },
 };
 
 export default showtimeService;

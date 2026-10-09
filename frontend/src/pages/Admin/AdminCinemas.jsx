@@ -57,6 +57,18 @@ export default function AdminCinemas() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa rạp chiếu này không?')) {
+      try {
+        await cinemaService.delete(id);
+        toast.success('Xóa rạp chiếu thành công!');
+        fetchCinemas();
+      } catch (err) {
+        toast.error(err.message || 'Xóa rạp chiếu thất bại');
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center border-b border-slate-800 pb-4">
@@ -98,12 +110,18 @@ export default function AdminCinemas() {
                     <td className="p-4 font-mono font-bold text-red-400">#{c.id}</td>
                     <td className="p-4 font-bold text-white text-base">{c.name}</td>
                     <td className="p-4 text-slate-300">📍 {c.address}</td>
-                    <td className="p-4 text-right">
+                    <td className="p-4 text-right space-x-2">
                       <button
                         onClick={() => handleOpenEdit(c)}
                         className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold border border-slate-700 transition-all"
                       >
                         Chỉnh Sửa
+                      </button>
+                      <button
+                        onClick={() => handleDelete(c.id)}
+                        className="px-3 py-1.5 bg-red-950/50 hover:bg-red-900/80 text-red-400 rounded-lg text-xs font-semibold border border-red-900/50 transition-all"
+                      >
+                        Xóa
                       </button>
                     </td>
                   </tr>

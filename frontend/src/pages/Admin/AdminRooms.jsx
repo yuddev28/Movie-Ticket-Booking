@@ -85,6 +85,19 @@ export default function AdminRooms() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa phòng chiếu này không?')) {
+      try {
+        await roomService.delete(id);
+        toast.success('Xóa phòng chiếu thành công!');
+        const res = await roomService.getByCinemaId(selectedCinemaId);
+        setRooms(Array.isArray(res) ? res : []);
+      } catch (err) {
+        toast.error(err.message || 'Xóa phòng chiếu thất bại');
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* HEADER & LỌC THEO RẠP */}
@@ -127,7 +140,7 @@ export default function AdminRooms() {
                 <th className="p-4">Thuộc Cụm Rạp</th>
                 <th className="p-4">Sơ Đồ Ghế (Hàng x Cột)</th>
                 <th className="p-4">Mô Tả</th>
-                <th className="p-4 text-right">Trạng Thái</th>
+                <th className="p-4 text-right">Hành Động</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800">
@@ -152,9 +165,12 @@ export default function AdminRooms() {
                     </td>
                     <td className="p-4 text-slate-400 text-xs">{r.description || 'Phòng tiêu chuẩn'}</td>
                     <td className="p-4 text-right">
-                      <span className="bg-emerald-950/90 text-emerald-400 border border-emerald-800 px-3 py-1 rounded-full text-xs font-bold">
-                        Hoạt động
-                      </span>
+                      <button
+                        onClick={() => handleDelete(r.id)}
+                        className="px-3 py-1.5 bg-red-950/50 hover:bg-red-900/80 text-red-400 rounded-lg text-xs font-semibold border border-red-900/50 transition-all"
+                      >
+                        Xóa
+                      </button>
                     </td>
                   </tr>
                 ))

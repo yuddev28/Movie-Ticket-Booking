@@ -32,12 +32,22 @@ const cinemaService = {
     }
   },
 
-  edit: async (data) => {
+  edit: async (id, data) => {
     try {
-      const res = await axiosClient.put(API_ENDPOINTS.CINEMAS.EDIT, data);
+      const res = await axiosClient.put(API_ENDPOINTS.CINEMAS.EDIT(id), { id, ...data });
       return res.data?.data || res.data;
     } catch (error) {
       console.error('Lỗi khi sửa rạp chiếu:', error);
+      throw error;
+    }
+  },
+
+  delete: async (id) => {
+    try {
+      const res = await axiosClient.delete(API_ENDPOINTS.CINEMAS.DELETE(id));
+      return res.data?.data || res.data;
+    } catch (error) {
+      console.error(`Lỗi khi xóa rạp chiếu ID ${id}:`, error);
       throw error;
     }
   },

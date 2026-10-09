@@ -132,6 +132,18 @@ export default function AdminMovies() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa phim này không? Các suất chiếu liên quan cũng có thể bị ảnh hưởng.')) {
+      try {
+        await movieService.delete(id);
+        toast.success('Xóa phim thành công!');
+        fetchMovies();
+      } catch (err) {
+        toast.error(err.message || 'Xóa phim thất bại');
+      }
+    }
+  };
+
   const movieList = Array.isArray(data?.content) ? data.content : [];
 
   return (
@@ -199,12 +211,18 @@ export default function AdminMovies() {
                           {statusInfo.label}
                         </span>
                       </td>
-                      <td className="p-4 text-right">
+                      <td className="p-4 text-right space-x-2">
                         <button
                           onClick={() => handleOpenEdit(m)}
                           className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold border border-slate-700 transition-all"
                         >
                           Chỉnh Sửa
+                        </button>
+                        <button
+                          onClick={() => handleDelete(m.id)}
+                          className="px-3 py-1.5 bg-red-950/50 hover:bg-red-900/80 text-red-400 rounded-lg text-xs font-semibold border border-red-900/50 transition-all"
+                        >
+                          Xóa
                         </button>
                       </td>
                     </tr>

@@ -68,10 +68,20 @@ const movieService = {
   // Cập nhật thông tin phim
   edit: async (id, movieData) => {
     try {
-      const res = await axiosClient.put(API_ENDPOINTS.MOVIES.EDIT(id), movieData);
+      const res = await axiosClient.put(API_ENDPOINTS.MOVIES.EDIT(id), { id, ...movieData });
       return res.data?.data || res.data;
     } catch (error) {
       console.error(`Lỗi khi sửa phim ID ${id}:`, error);
+      throw error;
+    }
+  },
+
+  delete: async (id) => {
+    try {
+      const res = await axiosClient.delete(API_ENDPOINTS.MOVIES.DELETE(id));
+      return res.data?.data || res.data;
+    } catch (error) {
+      console.error(`Lỗi khi xóa phim ID ${id}:`, error);
       throw error;
     }
   },

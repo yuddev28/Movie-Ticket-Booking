@@ -22,12 +22,22 @@ const roomService = {
     }
   },
 
-  edit: async (data) => {
+  edit: async (id, data) => {
     try {
-      const res = await axiosClient.put(API_ENDPOINTS.ROOMS.EDIT, data);
+      const res = await axiosClient.put(API_ENDPOINTS.ROOMS.EDIT(id), { id, ...data });
       return res.data?.data || res.data;
     } catch (error) {
       console.error('Lỗi khi sửa phòng chiếu:', error);
+      throw error;
+    }
+  },
+
+  delete: async (id) => {
+    try {
+      const res = await axiosClient.delete(API_ENDPOINTS.ROOMS.DELETE(id));
+      return res.data?.data || res.data;
+    } catch (error) {
+      console.error(`Lỗi khi xóa phòng chiếu ID ${id}:`, error);
       throw error;
     }
   },
