@@ -57,22 +57,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public RoomResponse createRoom(CreateRoomRequest request) 
     {
-        Cinema cinema = cinemaService.findCinemaById(request.getCinemaId());
-        if(cinema == null) throw new ResourceNotFoundException("Cinema not found");
-
-        int cols = request.getNumberOfColumns();
-        int rows = request.getNumberOfRows();
-        if(cols < 1 || cols > 50) 
-            throw new IllegalArgumentException("Number of columns must be between 1 and 50");
-        if(rows < 1 || rows > 26)
-            throw new IllegalArgumentException("Number of rows must be between 1 and 26");
-
-        Room room = new Room();
-        room.setCinema(cinema);
-        room.setName(request.getName());
-        room.setDescription(request.getDescription());
-        room.setNumberOfRows(request.getNumberOfRows());
-        room.setNumberOfColumns(request.getNumberOfColumns());
+        Room room = createFromRequest(request);
         Room savedRoom = roomRepository.save(room);
 
         List<Seat> seats = savedRoom.createSeats();
@@ -112,5 +97,26 @@ public class RoomServiceImpl implements RoomService {
         response.setNumberOfColumns(room.getNumberOfColumns());
         response.setNumberOfRows(room.getNumberOfRows());
         return response;
+    }
+
+    // Create room from create room request
+    private Room createFromRequest(CreateRoomRequest request) {
+        Cinema cinema = cinemaService.findCinemaById(request.getCinemaId());
+
+        if(cinema == null) throw new ResourceNotFoundException("Cinema not found");
+        int cols = request.getNumberOfColumns();
+        int rows = request.getNumberOfRows();
+        if(cols < 1 || cols > 50) 
+            throw new IllegalArgumentException("Number of columns must be between 1 and 50");
+        if(rows < 1 || rows > 26)
+            throw new IllegalArgumentException("Number of rows must be between 1 and 26");
+
+        Room room = new Room();
+        room.setCinema(cinema);
+        room.setName(request.getName());
+        room.setDescription(request.getDescription());
+        room.setNumberOfRows(request.getNumberOfRows());
+        room.setNumberOfColumns(request.getNumberOfColumns());
+        return room;
     }
 }
