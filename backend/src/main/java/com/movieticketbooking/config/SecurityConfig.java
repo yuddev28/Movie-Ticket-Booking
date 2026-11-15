@@ -41,92 +41,92 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
-                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                                .csrf(csrf -> csrf.disable())
-                                .sessionManagement(
-                                                sessionManagement -> sessionManagement
-                                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                                .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                                // SWAGGER & API DOCS
-                                                .requestMatchers(
-                                                                "/v3/api-docs/**",
-                                                                "/swagger-ui/**",
-                                                                "/swagger-ui.html")
-                                                .permitAll()
-                                                // AUTH
-                                                .requestMatchers(
-                                                                apiPrefix + "/auth/**")
-                                                .permitAll()
-                                                // GENRES
-                                                .requestMatchers(HttpMethod.GET,
-                                                                apiPrefix + "/genres/**")
-                                                .permitAll()
-                                                .requestMatchers(HttpMethod.POST,
-                                                                apiPrefix + "/genres/add")
-                                                .hasAuthority("ADMIN")
-                                                .requestMatchers(HttpMethod.PUT,
-                                                                apiPrefix + "/genres/edit", apiPrefix + "/genres/edit/**")
-                                                .hasAuthority("ADMIN")
-                                                // CINEMAS
-                                                .requestMatchers(HttpMethod.GET,
-                                                                apiPrefix + "/cinemas/**")
-                                                .permitAll()
-                                                .requestMatchers(HttpMethod.POST,
-                                                                apiPrefix + "/cinemas/add")
-                                                .hasAuthority("ADMIN")
-                                                .requestMatchers(HttpMethod.PUT,
-                                                                apiPrefix + "/cinemas/edit", apiPrefix + "/cinemas/edit/**")
-                                                .hasAuthority("ADMIN")
-                                                // MOVIES
-                                                .requestMatchers(HttpMethod.GET,
-                                                                apiPrefix + "/movies/**")
-                                                .permitAll()
-                                                .requestMatchers(HttpMethod.POST,
-                                                                apiPrefix + "/movies/add")
-                                                .hasAuthority("ADMIN")
-                                                .requestMatchers(HttpMethod.PUT,
-                                                                apiPrefix + "/movies/edit", apiPrefix + "/movies/edit/**")
-                                                .hasAuthority("ADMIN")
-                                                // ROOMS
-                                                .requestMatchers(HttpMethod.GET,
-                                                                apiPrefix + "/rooms/**")
-                                                .permitAll()
-                                                .requestMatchers(HttpMethod.POST,
-                                                                apiPrefix + "/rooms/add")
-                                                .hasAuthority("ADMIN")
-                                                .requestMatchers(HttpMethod.PUT,
-                                                                apiPrefix + "/rooms/edit", apiPrefix + "/rooms/edit/**")
-                                                .hasAuthority("ADMIN")
-                                                // SHOWTIMES
-                                                .requestMatchers(HttpMethod.GET,
-                                                                apiPrefix + "/showtimes/**")
-                                                .permitAll()
-                                                .requestMatchers(HttpMethod.GET,
-                                                                apiPrefix + "/showtimes/filter")
-                                                .hasAuthority("ADMIN")
-                                                .requestMatchers(HttpMethod.POST,
-                                                                apiPrefix + "/showtimes/add")
-                                                .hasAuthority("ADMIN")
-                                                // PAYMENTS
-                                                .requestMatchers(HttpMethod.GET,
-                                                                apiPrefix + "/payments/filter")
-                                                .hasAuthority("ADMIN")
-                                                .requestMatchers(HttpMethod.POST,
-                                                                apiPrefix + "/payments/local/create")
-                                                .hasAnyAuthority("USER", "ADMIN")
-                                                .requestMatchers(HttpMethod.POST,
-                                                                apiPrefix + "/payments/local/confirm")
-                                                .hasAuthority("ADMIN")
-                                                // TICKETS
-                                                .requestMatchers(HttpMethod.GET,
-                                                                apiPrefix + "/tickets/filter")
-                                                .hasAuthority("ADMIN")
-                                                // OTHER API
-                                                .anyRequest().authenticated())
-                                .authenticationProvider(authenticationProvider())
-                                .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
-                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                        .csrf(csrf -> csrf.disable())
+                        .sessionManagement(
+                                sessionManagement -> sessionManagement
+                                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .authorizeHttpRequests(auth -> auth
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                // SWAGGER & API DOCS
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html")
+                                .permitAll()
+                                // AUTH
+                                .requestMatchers(
+                                        apiPrefix + "/auth/**")
+                                .permitAll()
+                                // GENRES
+                                .requestMatchers(HttpMethod.GET,
+                                        apiPrefix + "/genres/**")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST,
+                                        apiPrefix + "/genres/add")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,
+                                        apiPrefix + "/genres/edit", apiPrefix + "/genres/edit/**")
+                                .hasAuthority("ADMIN")
+                                // CINEMAS
+                                .requestMatchers(HttpMethod.GET,
+                                        apiPrefix + "/cinemas/**")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST,
+                                        apiPrefix + "/cinemas/add")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,
+                                        apiPrefix + "/cinemas/edit", apiPrefix + "/cinemas/edit/**")
+                                .hasAuthority("ADMIN")
+                                // MOVIES
+                                .requestMatchers(HttpMethod.GET,
+                                        apiPrefix + "/movies/**")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST,
+                                        apiPrefix + "/movies/add")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,
+                                        apiPrefix + "/movies/edit", apiPrefix + "/movies/edit/**")
+                                .hasAuthority("ADMIN")
+                                // ROOMS
+                                .requestMatchers(HttpMethod.GET,
+                                        apiPrefix + "/rooms/**")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST,
+                                        apiPrefix + "/rooms/add")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,
+                                        apiPrefix + "/rooms/edit", apiPrefix + "/rooms/edit/**")
+                                .hasAuthority("ADMIN")
+                                // SHOWTIMES
+                                .requestMatchers(HttpMethod.GET,
+                                        apiPrefix + "/showtimes/**")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.GET,
+                                        apiPrefix + "/showtimes/filter")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.POST,
+                                        apiPrefix + "/showtimes/add")
+                                .hasAuthority("ADMIN")
+                                // PAYMENTS
+                                .requestMatchers(HttpMethod.GET,
+                                        apiPrefix + "/payments/filter")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.POST,
+                                        apiPrefix + "/payments/local/create")
+                                .hasAnyAuthority("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.POST,
+                                        apiPrefix + "/payments/local/confirm")
+                                .hasAuthority("ADMIN")
+                                // TICKETS
+                                .requestMatchers(HttpMethod.GET,
+                                        apiPrefix + "/tickets/filter")
+                                .hasAuthority("ADMIN")
+                                // OTHER API
+                                .anyRequest().authenticated())
+                        .authenticationProvider(authenticationProvider())
+                        .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
+                        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
                 return http.build();
         }

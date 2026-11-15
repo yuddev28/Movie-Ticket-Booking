@@ -1,0 +1,10 @@
+
+target/
+.git/
+.idea/
+.vscode/
+*.iml
+.env
+data.sql
+init.sql
+test_api.txt

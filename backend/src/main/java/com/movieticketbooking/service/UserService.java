@@ -7,6 +7,7 @@ import com.movieticketbooking.response.UserResponse;
 
 public interface UserService {
     User findUserById(int id);
+    boolean existsByEmail(String email);
     UserResponse getUserById(int id);
     UserResponse addUser(CreateUserRequest createUserRequest);
     UserResponse updateUser(UpdateInfoUserRequest updateInfoUserRequest);

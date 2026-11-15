@@ -102,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
         return authResponse;
     }
 
-    // Refresh access token bằng Refresh Token
+    // Refresh access token
     @Override
     @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request) {
@@ -149,7 +149,8 @@ public class AuthServiceImpl implements AuthService {
     public void forgotPassword(ForgotPasswordRequest request) {
         String email = request.getEmail();
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Tài khoản với Email [" + email + "] không tồn tại trong hệ thống!"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Tài khoản với Email [" + email + "] không tồn tại trong hệ thống!"));
 
         // Sinh mã OTP 6 số ngẫu nhiên từ 100000 -> 999999
         String otpCode = String.format("%06d", new Random().nextInt(900000) + 100000);

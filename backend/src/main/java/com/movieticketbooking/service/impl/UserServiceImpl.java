@@ -27,6 +27,11 @@ public class UserServiceImpl implements UserService {
         return user.get();
     }
 
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     // get user by id
     @Override
     public UserResponse getUserById(int id) {
@@ -62,8 +67,6 @@ public class UserServiceImpl implements UserService {
         return toResponse(savedUser);
     }
 
-    // write controller
-
 
     // map to response
     private UserResponse toResponse(User user) {
@@ -75,4 +78,6 @@ public class UserServiceImpl implements UserService {
         userResponse.setRole(user.getRole());
         return userResponse;
     }
+
+    
 }

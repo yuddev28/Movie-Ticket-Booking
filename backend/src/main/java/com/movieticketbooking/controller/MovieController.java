@@ -21,67 +21,55 @@ public class MovieController {
     private final MovieService movieService;
 
     // Get movie by id
-    @GetMapping({"/movie/{id}", "/{id}"})
-    public ResponseEntity<ApiResponse> getById(@PathVariable Integer id)
-    {
+    @GetMapping({ "/movie/{id}", "/{id}" })
+    public ResponseEntity<ApiResponse> getById(@PathVariable Integer id) {
         MovieResponse resp = movieService.getMovieById(id);
         return ResponseEntity.ok(new ApiResponse("Get movie success", resp));
     }
 
     // Filter movie by name
     @GetMapping("/filter")
-    public ResponseEntity<ApiResponse> getByName
-            (@RequestParam(defaultValue = "1") int page,
-             @RequestParam(defaultValue = "10") int size,
-             @RequestParam(required = false) String name)
-    {
+    public ResponseEntity<ApiResponse> getByName(@RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String name) {
         PagedResponse<MovieResponse> resp = movieService.filterName(
-                    page, size, name);
+                page, size, name);
         return ResponseEntity.ok(new ApiResponse("Get movie success", resp));
     }
 
     @GetMapping("/now-showing")
-    public ResponseEntity<ApiResponse> getMovieNowShowing
-            (@RequestParam(defaultValue = "1") int page,
-             @RequestParam(defaultValue = "10") int size)
-    {
+    public ResponseEntity<ApiResponse> getMovieNowShowing(@RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         PagedResponse<MovieResponse> resp = movieService.filterStatus(
-                    page, size, MovieStatus.NOW_SHOWING);
+                page, size, MovieStatus.NOW_SHOWING);
         return ResponseEntity.ok(new ApiResponse("Get movie success", resp));
     }
 
     @GetMapping("/coming-soon")
-    public ResponseEntity<ApiResponse> getMovieComingSoon
-            (@RequestParam(defaultValue = "1") int page,
-             @RequestParam(defaultValue = "10") int size)
-    {
+    public ResponseEntity<ApiResponse> getMovieComingSoon(@RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         PagedResponse<MovieResponse> resp = movieService.filterStatus(
-                    page, size, MovieStatus.COMING_SOON);
+                page, size, MovieStatus.COMING_SOON);
         return ResponseEntity.ok(new ApiResponse("Get movie success", resp));
     }
 
     // Add new movie
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addMovie
-            (@RequestBody @Valid CreateMovieRequest request)
-    {
+    public ResponseEntity<ApiResponse> addMovie(@RequestBody @Valid CreateMovieRequest request) {
         MovieResponse resp = movieService.addMovie(request);
         return ResponseEntity.ok(new ApiResponse("Add movie success", resp));
     }
 
     // Update movie
-    @PutMapping({"/edit", "/{id}"})
-    public ResponseEntity<ApiResponse> updateMovie
-            (@RequestBody @Valid UpdateMovieRequest request)
-    {
+    @PutMapping({ "/edit", "/{id}" })
+    public ResponseEntity<ApiResponse> updateMovie(@RequestBody @Valid UpdateMovieRequest request) {
         MovieResponse resp = movieService.updateMovie(request);
         return ResponseEntity.ok(new ApiResponse("Update movie success", resp));
     }
 
     // Delete movie
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteMovie(@PathVariable int id)
-    {
+    public ResponseEntity<ApiResponse> deleteMovie(@PathVariable int id) {
         movieService.deleteMovie(id);
         return ResponseEntity.ok(new ApiResponse("Delete movie success", null));
     }

@@ -25,6 +25,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+    /**    
+     * Filter chain for JWT authentication in request.
+     * Step 1: Extract the JWT token from the Authorization header.
+     * Step 2: Validate the JWT token and extract the username (email) from it.
+     * Step 3: Load the user details using the extracted username.
+     * Step 4: If the token is valid, set the authentication in the SecurityContext.
+     * 
+    */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,

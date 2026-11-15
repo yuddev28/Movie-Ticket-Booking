@@ -33,4 +33,13 @@ public class CreateUserRequest {
         this.phoneNumber = phoneNumber;
         this.role = Role.USER;
     }
+
+    // for register
+    public CreateUserRequest(String name, String password, String email, String phoneNumber, Role role) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+    }
 }
