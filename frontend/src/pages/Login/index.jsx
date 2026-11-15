@@ -86,12 +86,9 @@ export default function Login() {
 
           {/* PASSWORD */}
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-medium text-slate-300">
-                Mật khẩu <span className="text-red-500">*</span>
-              </label>
-              <Link to="/forgot-password" className="text-xs text-red-400 hover:underline">Quên mật khẩu?</Link>
-            </div>
+            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              Mật khẩu <span className="text-red-500">*</span>
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -117,6 +114,12 @@ export default function Login() {
                   </svg>
                 )}
               </button>
+            </div>
+            {/* LINK QUÊN MẬT KHẨU Ở BÊN DƯỚI KHUNG NHẬP MẬT KHẨU */}
+            <div className="flex justify-end mt-2">
+              <Link to="/forgot-password" className="text-xs text-red-400 hover:underline">
+                Quên mật khẩu?
+              </Link>
             </div>
           </div>
 

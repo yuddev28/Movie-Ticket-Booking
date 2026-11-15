@@ -24,14 +24,14 @@ export default function AdminMovies() {
   const [editingMovie, setEditingMovie] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
+    directorName: '',
+    actorsName: '',
     description: '',
     duration: 120,
-    rating: 8.5,
-    releaseDate: '',
-    showAt: '',
+    country: '',
     imageUrl: '',
-    bannerUrl: '',
     movieStatus: 'NOW_SHOWING',
+    showAt: '',
     genreIds: [],
   });
 
@@ -79,14 +79,14 @@ export default function AdminMovies() {
     setEditingMovie(null);
     setFormData({
       name: '',
+      directorName: '',
+      actorsName: '',
       description: '',
       duration: 120,
-      rating: 8.5,
-      releaseDate: '',
-      showAt: '',
+      country: '',
       imageUrl: '',
-      bannerUrl: '',
       movieStatus: 'NOW_SHOWING',
+      showAt: '',
       genreIds: [],
     });
     setIsModalOpen(true);
@@ -97,14 +97,14 @@ export default function AdminMovies() {
     const currentStatus = m.movieStatus || m.status || 'NOW_SHOWING';
     setFormData({
       name: m.name || '',
+      directorName: m.directorName || '',
+      actorsName: m.actorsName || '',
       description: m.description || '',
       duration: m.duration || 120,
-      rating: m.rating || 8.5,
-      releaseDate: m.releaseDate ? m.releaseDate.split('T')[0] : '',
-      showAt: m.showAt ? m.showAt.split('T')[0] : '',
+      country: m.country || '',
       imageUrl: m.imageUrl || '',
-      bannerUrl: m.bannerUrl || '',
       movieStatus: currentStatus,
+      showAt: m.showAt ? m.showAt.split('T')[0] : '',
       genreIds: m.genres ? genres.filter((g) => m.genres.includes(g.name)).map((g) => g.id) : [],
     });
     setIsModalOpen(true);
@@ -113,16 +113,43 @@ export default function AdminMovies() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        ...formData,
-        status: formData.movieStatus,
-        genres: formData.genreIds || [],
-      };
+      // Đảm bảo showAt có đủ định dạng yyyy-MM-ddTHH:mm:ss nếu có giá trị
+      let formattedShowAt = formData.showAt;
+      if (formattedShowAt && !formattedShowAt.includes('T')) {
+        formattedShowAt = `${formattedShowAt}T00:00:00`;
+      }
+
       if (editingMovie) {
-        await movieService.edit(editingMovie.id, { id: editingMovie.id, ...payload });
+        // Cấu trúc chuẩn theo UpdateMovieRequest trong Backend:
+        // { id, name, directorName, actorsName, description, duration, country, imageUrl, movieStatus, showAt }
+        const updatePayload = {
+          id: editingMovie.id,
+          name: formData.name,
+          directorName: formData.directorName,
+          actorsName: formData.actorsName,
+          description: formData.description,
+          duration: Number(formData.duration),
+          country: formData.country,
+          imageUrl: formData.imageUrl,
+          movieStatus: formData.movieStatus,
+          showAt: formattedShowAt || null,
+        };
+        await movieService.edit(editingMovie.id, updatePayload);
         toast.success('Cập nhật phim thành công!');
       } else {
-        await movieService.add(payload);
+        const createPayload = {
+          name: formData.name,
+          directorName: formData.directorName,
+          actorsName: formData.actorsName,
+          description: formData.description,
+          duration: Number(formData.duration),
+          country: formData.country,
+          imageUrl: formData.imageUrl,
+          movieStatus: formData.movieStatus,
+          showAt: formattedShowAt || null,
+          genres: formData.genreIds || [],
+        };
+        await movieService.add(createPayload);
         toast.success('Thêm phim mới thành công!');
       }
       setIsModalOpen(false);
@@ -265,7 +292,9 @@ export default function AdminMovies() {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingMovie ? 'Chỉnh Sửa Phim' : 'Thêm Phim Mới'}>
         <form onSubmit={handleSubmit} className="space-y-4 text-sm text-slate-200">
           <div>
-            <label className="block text-xs font-semibold mb-1">Tên Phim</label>
+            <label className="block text-xs font-semibold mb-1">
+              Tên Phim <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               required
@@ -277,15 +306,63 @@ export default function AdminMovies() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold mb-1">Thời Lượng (Phút)</label>
+              <label className="block text-xs font-semibold mb-1">
+                Đạo Diễn <span className="text-red-500">*</span>
+              </label>
               <input
-                type="number"
+                type="text"
                 required
-                value={formData.duration}
-                onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value, 10) })}
+                placeholder="vd: Christopher Nolan"
+                value={formData.directorName}
+                onChange={(e) => setFormData({ ...formData, directorName: e.target.value })}
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500"
               />
             </div>
+            <div>
+              <label className="block text-xs font-semibold mb-1">
+                Diễn Viên <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="vd: Leonardo DiCaprio, ..."
+                value={formData.actorsName}
+                onChange={(e) => setFormData({ ...formData, actorsName: e.target.value })}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold mb-1">
+                Thời Lượng (Phút) <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                required
+                min="1"
+                value={formData.duration}
+                onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value, 10) || 0 })}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold mb-1">
+                Quốc Gia <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="vd: Mỹ, Hàn Quốc, Việt Nam"
+                value={formData.country}
+                onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold mb-1">Trạng Thái Chiếu</label>
               <select
@@ -295,32 +372,67 @@ export default function AdminMovies() {
               >
                 <option value="NOW_SHOWING">🎬 ĐANG CHIẾU</option>
                 <option value="COMING_SOON">🌟 SẮP CHIẾU</option>
-                <option value="END_SHOWING">🚫 NGỪNG CHIẾU</option>
+                <option value="STOPPED_SHOWING">🚫 NGỪNG CHIẾU</option>
               </select>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold mb-1">Ngày Chiếu (Show At)</label>
+              <input
+                type="date"
+                value={formData.showAt}
+                onChange={(e) => setFormData({ ...formData, showAt: e.target.value })}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500"
+              />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold mb-1">Poster URL</label>
-              <input
-                type="text"
-                required
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold mb-1">Banner URL</label>
-              <input
-                type="text"
-                value={formData.bannerUrl}
-                onChange={(e) => setFormData({ ...formData, bannerUrl: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500"
-              />
-            </div>
+          <div>
+            <label className="block text-xs font-semibold mb-1">
+              Poster URL (Hình ảnh) <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              placeholder="https://example.com/poster.jpg"
+              value={formData.imageUrl}
+              onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500"
+            />
           </div>
+
+          {!editingMovie && genres.length > 0 && (
+            <div>
+              <label className="block text-xs font-semibold mb-1">Thể Loại Phim</label>
+              <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-2 bg-slate-950 border border-slate-800 rounded-xl">
+                {genres.map((g) => {
+                  const isChecked = formData.genreIds?.includes(g.id);
+                  return (
+                    <label
+                      key={g.id}
+                      className={`px-2.5 py-1 rounded-lg text-xs cursor-pointer border transition-colors ${
+                        isChecked
+                          ? 'bg-red-950/80 border-red-600 text-red-200'
+                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        className="hidden"
+                        checked={isChecked}
+                        onChange={(e) => {
+                          const newIds = e.target.checked
+                            ? [...(formData.genreIds || []), g.id]
+                            : (formData.genreIds || []).filter((id) => id !== g.id);
+                          setFormData({ ...formData, genreIds: newIds });
+                        }}
+                      />
+                      {g.name}
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="block text-xs font-semibold mb-1">Mô Tả Phim</label>
@@ -328,6 +440,7 @@ export default function AdminMovies() {
               rows="3"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="Nội dung tóm tắt phim..."
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500"
             />
           </div>
